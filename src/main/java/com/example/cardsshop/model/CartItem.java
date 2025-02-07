@@ -1,10 +1,18 @@
 package com.example.cardsshop.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
@@ -12,42 +20,37 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @ManyToOne
+    @NotNull(message = "Пользователь не может быть пустым")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Positive(message = "Количество должно быть положительным")
-    @Column(nullable = false)
-    private Integer quantity;
+    @NotNull(message = "Товар не может быть пустым")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-    // Конструкторы
-    public CartItem() {}
+    @Min(value = 1, message = "Количество товара должно быть не менее 1")
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 
-    public CartItem(Product product, User user, Integer quantity) {
-        this.product = product;
-        this.user = user;
-        this.quantity = quantity;
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+
+    @Column(name = "added_at", nullable = false)
+    private LocalDateTime addedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.addedAt = LocalDateTime.now();
+        this.totalPrice = this.price.multiply(BigDecimal.valueOf(this.quantity));
     }
 
-    // Геттеры и сеттеры
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
-
-    // Метод для расчета общей стоимости товара
-    public BigDecimal getTotalPrice() {
-        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
+    @PreUpdate
+    public void preUpdate() {
+        this.totalPrice = this.price.multiply(BigDecimal.valueOf(this.quantity));
     }
 }
