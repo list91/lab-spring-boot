@@ -1,20 +1,17 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: cards-shop-db
     environment:
-      POSTGRES_DB: cardsshopdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cardshop
+      POSTGRES_USER: cardshop
+      POSTGRES_PASSWORD: cardshop_password
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U cardshop -d cardshop"]
+      interval: 10s
       timeout: 5s
       retries: 5
 
@@ -22,19 +19,16 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: cards-shop-app
+    ports:
+      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cardsshopdb
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_PROFILES_ACTIVE=dev
-    ports:
-      - "8080:8080"
-    restart: unless-stopped
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cardshop
+      - SPRING_DATASOURCE_USERNAME=cardshop
+      - SPRING_DATASOURCE_PASSWORD=cardshop_password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
 volumes:
-  postgres-data:
-    driver: local
+  postgres_data:

@@ -1,46 +1,27 @@
 # Этап сборки
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM maven:3.9.5-eclipse-temurin-17-alpine AS build
+
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копирование только pom.xml для кэширования зависимостей
+# Копируем файлы проекта
 COPY pom.xml .
-
-# Настройка Maven для использования центрального репозитория
-RUN mkdir -p /root/.m2 \
-    && echo "<settings xmlns='http://maven.apache.org/SETTINGS/1.0.0' \
-             xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' \
-             xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 \
-             https://maven.apache.org/xsd/settings-1.0.0.xsd'> \
-             <mirrors> \
-                 <mirror> \
-                     <id>central</id> \
-                     <name>Maven Central Repository</name> \
-                     <url>https://repo.maven.apache.org/maven2</url> \
-                     <mirrorOf>*</mirrorOf> \
-                 </mirror> \
-             </mirrors> \
-             <proxies> \
-             </proxies> \
-           </settings>" > /root/.m2/settings.xml
-
-# Загрузка зависимостей
-RUN mvn dependency:go-offline
-
-# Копирование исходного кода
 COPY src ./src
 
-# Сборка приложения без тестов
+# Собираем приложение
 RUN mvn clean package -DskipTests
 
-# Финальный этап
-FROM openjdk:17-jdk-slim
+# Финальный образ
+FROM eclipse-temurin:17-jre-alpine
+
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копирование собранного jar-файла из предыдущего этапа
-COPY --from=build /app/target/*.jar app.jar
+# Копируем собранный jar
+COPY --from=build /app/target/cards-shop-0.0.1-SNAPSHOT.jar app.jar
 
-# Открываем порт приложения
+# Указываем порт
 EXPOSE 8080
 
-# Точка входа
+# Команда запуска
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

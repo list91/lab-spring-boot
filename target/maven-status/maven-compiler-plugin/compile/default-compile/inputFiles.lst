@@ -1,0 +1,15 @@
+/app/src/main/java/com/cardshop/app/config/SecurityConfig.java
+/app/src/main/java/com/cardshop/app/repository/CartItemRepository.java
+/app/src/main/java/com/cardshop/app/config/SwaggerConfig.java
+/app/src/main/java/com/cardshop/app/service/CartService.java
+/app/src/main/java/com/cardshop/app/service/UserService.java
+/app/src/main/java/com/cardshop/app/controller/CartController.java
+/app/src/main/java/com/cardshop/app/repository/ProductRepository.java
+/app/src/main/java/com/cardshop/app/CardShopApplication.java
+/app/src/main/java/com/cardshop/app/model/CartItem.java
+/app/src/main/java/com/cardshop/app/repository/UserRepository.java
+/app/src/main/java/com/cardshop/app/service/ProductService.java
+/app/src/main/java/com/cardshop/app/model/User.java
+/app/src/main/java/com/cardshop/app/controller/ProductController.java
+/app/src/main/java/com/cardshop/app/controller/UserController.java
+/app/src/main/java/com/cardshop/app/model/Product.java
