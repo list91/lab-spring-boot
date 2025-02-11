@@ -24,12 +24,12 @@ function Test-ApiRequest {
             $response = Invoke-WebRequest -Uri $Url -Method $Method -Headers $headers
         }
 
-        Write-Host "Request $Method to $Url successful:" -ForegroundColor Green
+        Write-Host ("Request {0} to {1} successful:" -f $Method, $Url) -ForegroundColor Green
         $response.Content | ConvertFrom-Json | Format-List
         return $response
     }
     catch {
-        Write-Host "Error executing request to $Url:" -ForegroundColor Red
+        Write-Host ("Error executing request to {0}:" -f $Url) -ForegroundColor Red
         Write-Host $_.Exception.Message -ForegroundColor Red
         return $null
     }

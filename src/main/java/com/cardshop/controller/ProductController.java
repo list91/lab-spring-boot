@@ -1,67 +1,43 @@
 package com.cardshop.controller;
 
 import com.cardshop.model.Product;
+import com.cardshop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@Tag(name = "Контроллер товаров", description = "Операции с товарами")
+@Tag(name = "Product Controller", description = "Operations with products")
 public class ProductController {
 
-    private List<Product> products = new ArrayList<>();
+    @Autowired
+    private ProductService productService;
 
     @PostMapping
-    @Operation(summary = "Создание нового товара")
+    @Operation(summary = "Create a new product")
     public Product createProduct(@RequestBody Product product) {
-        product.setId(products.size() + 1L);
-        products.add(product);
-        return product;
+        return productService.createProduct(product);
     }
 
     @GetMapping
-    @Operation(summary = "Получение списка всех товаров")
+    @Operation(summary = "Get list of all products")
     public List<Product> getAllProducts() {
-        return products;
+        return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Получение товара по ID")
+    @Operation(summary = "Get product by ID")
     public Product getProductById(@PathVariable Long id) {
-        return products.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return productService.getProductById(id);
     }
 
-    // Инициализация тестовыми данными
     @PostMapping("/init")
-    @Operation(summary = "Инициализация тестовыми товарами")
+    @Operation(summary = "Initialize test products")
     public List<Product> initTestProducts() {
-        products.clear();
-        
-        Product card1 = new Product();
-        card1.setName("Магическая карта Дракона");
-        card1.setDescription("Редкая карта с изображением древнего дракона");
-        card1.setPrice(BigDecimal.valueOf(199.99));
-        card1.setCategory("Magic: The Gathering");
-        card1.setStockQuantity(5);
-        
-        Product card2 = new Product();
-        card2.setName("Карта Эльфийского Воина");
-        card2.setDescription("Легендарная карта эльфийского воителя");
-        card2.setPrice(BigDecimal.valueOf(149.50));
-        card2.setCategory("Fantasy Cards");
-        card2.setStockQuantity(10);
-
-        createProduct(card1);
-        createProduct(card2);
-
-        return products;
+        return productService.initTestProducts();
     }
 }
