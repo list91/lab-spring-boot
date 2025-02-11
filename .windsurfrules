@@ -4,3 +4,77 @@
 1. после внесения тех или иных изменений, таски или иной значительный функционал, ты обязан периодически запускать приложение для четкого отслеживания работоспособности проверяемого функционала, то есть после каждой таски запускай и собирай проект и проверяй его через фетч запросы
 2. mvn отсуствует на данном ПК и его нельзя устанавливать сюда, поэтому у тебя в распоряжении докер и соответствующие образы для работы с java
 
+Speak to me in russian.
+ALWAYS use PowerShell-specific command syntax when working in a Windows environment:
+- Replace `rm -rf` with `Remove-Item -Recurse -Force`
+- Replace `&&` with `;`
+- Use PowerShell flags and parameters instead of Unix-style flags
+- Escape special characters according to PowerShell rules
+- Handle file paths with spaces using quotes
+- Use `-Path` or `-LiteralPath` for path-based operations
+- Convert Unix shell commands to their PowerShell equivalents
+
+When executing commands:
+1. Check the OS and shell type before selecting command syntax
+2. Prefer native PowerShell cmdlets over external tools
+3. Use full cmdlet names for clarity
+4. Handle errors and exceptions gracefully
+5. Use PowerShell-specific parameter naming conventions
+
+CRITICAL: Never assume Unix/Bash syntax will work in PowerShell. Always adapt commands to PowerShell's syntax and conventions.
+During you interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section in the `scratchpad.md` file so you will not make the same mistake again. 
+
+You should also use the `scratchpad.md` file as a scratchpad to organize your thoughts. Especially when you receive a new task, you should first review the content of the scratchpad, clear old different task if necessary, first explain the task, and plan the steps you need to take to complete the task. You can use todo markers to indicate the progress, e.g.
+[X] Task 1
+[ ] Task 2
+Also update the progress of the task in the Scratchpad when you finish a subtask.
+Especially when you finished a milestone, it will help to improve your depth of task accomplishment to use the scratchpad to reflect and plan.
+The goal is to help you maintain a big picture as well as the progress of the task. Always refer to the Scratchpad when you plan the next step.
+
+1. **Bug Logging**: Create a separate section in the bug notebook where you can record each bug you encounter with a description, status, and resolution.
+
+2. **Consistent Entry Format**: Use a specific format to record each bug to ensure consistency and readability. For example:
+```
+## Bug #ID
+- Description: [Brief description of the bug]
+- Status: [Resolved/Unresolved/Unknown]
+- Resolution: [Brief description of the solution or "Not applicable"]
+- Date: [Date of discovery]
+```
+
+3. **Regular Status Entries**: If at some point there are no bugs, you can make an entry to emphasize that everything is working properly:
+```
+## Bug Status
+- There are currently no bugs. 🟢
+```
+
+4. **Recording Fixes**: Each time you fix a bug, add a fix entry:
+```
+## Fix for bug #ID
+- Fix Date: [Date]
+- Change Description: [Description of Changes Made]
+- Status After Fix: [Resolved/Unresolved]
+```
+
+5. **Updating Statuses**: After each attempt to fix a bug, update the entries to indicate whether the bug was resolved or not:
+```
+## Bug #ID
+- Description: [Description]
+- Status: [Updated Status]
+- Solution: [If applicable, solution description]
+```
+
+6. **Reflecting on Bugs**: After you finish fixing a bug, do a quick review, noting what was useful or what you learned:
+```
+## Lessons
+- [A note about what was learned in in the process of working on the bugs]
+```
+Every time I interact with a user, I log any reusable information in the Lessons section of the `scratchpad.md` block. When I find a bug, I always log it in the Bug Logs section and record all the changes related to the fix in a simple and understandable way.
+
+After each attempt at a fix, I should make a note of the actions taken:
+- Date of change
+- Description of the bug
+- Description of the fix made
+- Current status of the bug (Resolved/Not resolved)
+
+Just in case there are no bugs, I make a note confirming that everything is working properly. By systematically checking and recording my actions, I will be able to better track my work and prevent repeat errors. 🛠️
